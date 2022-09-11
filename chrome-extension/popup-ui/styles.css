@@ -32,3 +32,13 @@ h1 {
 #record-status {
   font-weight: bold;
 }
+
+#two-factor {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.margin-bottom {
+  margin-bottom: 1rem;
+}

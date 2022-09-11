@@ -35,6 +35,7 @@ So the JSON structure might be something like this:
   accountType: "", // debt, asset
   siteUrl: "",
   twoFactor: bool,
+  twoFactorPrefix: "", eg. bofa this is arbitrary based on account name, sms response template
   interactionSteps: [
     {
       target: "",
@@ -120,6 +121,36 @@ I'm still working on the event recording right now
 
 Taking a quick break
 
+11:54 AM
+
+back on, have about 7 hours to finish this, need to do it faster than that but will make a video too
+
+So at this point I still don't have the event recording down, need to get that into a form that I can feed into Puppeteer directly
+
+Hmm... 2FA is interesting to handle with the event recording
+
+I think for now I will just do a manual separate recording event through the popup ui
+
+12:18 PM
+
+mmm yeah Mammoth Epiphany
+
+*Ja...cob tries... so hard...* to build the same thing over and over again
+
+12:34 PM
+
+WTF... I can't detect when this page is changing urls
+
+Must be a SPA
+
+12:40 PM
+
+Oh... my injected script doesn't persist so it gets erased, it also can't detect the unload
+
+I'll just emit upwards at an interval so popui has the current data
+
+
+
 ### Saving recorded event into DB
 
 ### Puppeteer read and run events
@@ -128,4 +159,9 @@ Taking a quick break
 
 ### Check whole thing works
 
+### Video
+
+show scratch demo site for event/element grabbing
+
+show entire screen, phone offscreen but console logs show sms sent/received
 

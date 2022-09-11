@@ -1,6 +1,8 @@
 // bind to events
 let recording = false;
 let recordedEvents = {};
+let landingPageUrl = window.location.href;
+let pageNavigationDetected = false; // for not calling it twice
 
 const truncateString = (string) => {
   if (string.length > 12) {
@@ -24,6 +26,7 @@ const elementInRecordedSet = (elemId, recordedSet) => {
 }
 
 window.addEventListener('click', (e) => {
+  console.log('click', recording);
   if (recording) {
     if (!Object.keys(recordedEvents).length) {
       recordedEvents = {
@@ -50,6 +53,8 @@ window.addEventListener('click', (e) => {
       classList,
       submitType: false // manually corrected
     });
+
+    console.log(recordedEvents);
   }
 });
 
@@ -70,11 +75,55 @@ window.addEventListener('keyup', (e) => {
         inputType: true // kind of odd with submitType
       });
     }
+
+    console.log(recordedEvents);
   }
 });
 
-const sendMessageToExtension = (msg) => {
+// https://stackoverflow.com/a/32158577/2710227
+// just going to use a timer for the case of a SPA deal
+setInterval(() => {
+  if (window.location.href !== landingPageUrl) {
+    pageNavigated('timer');
+  }
+}, 500);
 
+// detect when page changes like logging in
+// if the page does not refresh/change url, can just hit save in the extension popup
+// https://gomakethings.com/how-to-detect-when-the-browser-url-changes-with-vanilla-js/
+// does not work on some sites
+window.addEventListener('popstate', () => {
+  console.log('pop');
+  pageNavigated('pop');
+});
+
+// unload eg. refresh
+// https://stackoverflow.com/a/7256224/2710227
+window.addEventListener("beforeunload", function (e) {
+  console.log('unload');
+  pageNavigated('unload');
+
+  (e || window.event).returnValue = null;
+  return null;
+});
+
+const pageNavigated = (navigationType) => {
+  alert('page navigate', navigationType);
+  if (recording && !pageNavigationDetected) {
+    pageNavigated = true;
+
+    sendMessageToExtension({
+      recordedEvent: recordedEvents, // hmm
+      stopRecording: true
+    });
+
+    alert('changing page');
+  }
+}
+
+// expects object
+const sendMessageToExtension = (msg) => {
+  window.postMessage(msg);
 }
 
 // receive messages from chrome extension icon
@@ -89,11 +138,13 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
       recording = true;
     }
 
-    if (msg.cmd === 'stop recording') {
+    if (msg.cmd === 'save') {
       recording = false;
 
+      alert(recordedEvents);
+
       // send up
-      window.postMessage({
+      sendMessageToExtension({
         recordedEvent: recordedEvents // hmm
       });
     }

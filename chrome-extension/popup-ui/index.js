@@ -22,6 +22,16 @@ const updateStorage = () => {
   localStorage.setItem('barip', JSON.stringify(storage));
 }
 
+const toggleRecording = (cmd) => {
+  if (cmd?.stop) {
+    storage.recording = false;
+  } else {
+    storage.recording = true;
+  }
+
+  updateStorage();
+}
+
 const sendMessageToInjectedScript = (msg) => {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, msg, (response) => {
@@ -33,19 +43,18 @@ const sendMessageToInjectedScript = (msg) => {
 recordBtn.addEventListener('click', () => {
   if (storage?.recording) {
     recordBtn.innerText = 'Record';
-    storage.recording = false;
-    updateStorage();
+    toggleRecording({stop: true});
   } else {
     recordBtn.innerText = 'Recording...';
     helperText.innerText = 'When finished, hit save and view result output.';
 
     // send message down to injected script to start recording interactions on site
     sendMessageToInjectedScript({cmd: 'start recording'});
-    storage.recording = true;
-    updateStorage();
+    toggleRecording({stop: false});
 
     saveBtn.addEventListener('click', () => {
-      
+      toggleRecording({stop: true});
+      sendMessageToInjectedScript({cmd: 'save'});
     });
   }
 });
@@ -56,6 +65,10 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
   
   if (msg?.recordedEvent) {
     // validate what it is and clean, also do it on server side
+    console.log(msg);
 
+    if (msg?.stopRecording) {
+      toggleRecording({stop: true});
+    }
   }
 });
