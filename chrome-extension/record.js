@@ -1,12 +1,10 @@
 // bind to events
 let recording = false;
 let recordedEvents = {};
-let landingPageUrl = window.location.href;
-let pageNavigationDetected = false; // for not calling it twice
 
 const truncateString = (string) => {
-  if (string.length > 12) {
-    return string.substring(0, 12); // start, length
+  if (string.length > 24) {
+    return string.substring(0, 24); // start, length
   }
 
   return string;
@@ -17,7 +15,7 @@ const elementInRecordedSet = (elemId, recordedSet) => {
   for (let i = 0; i < recordedSet.length; i++) {
     const recordedElement = recordedSet[i];
 
-    if (elemId in recordedElement) {
+    if (elemId === recordedElement.elemId) {
       return true;
     }
   }
@@ -26,16 +24,19 @@ const elementInRecordedSet = (elemId, recordedSet) => {
 }
 
 window.addEventListener('click', (e) => {
-  console.log('click', recording);
+  console.log('click', recording, e);
+
   if (recording) {
     if (!Object.keys(recordedEvents).length) {
       recordedEvents = {
         name: document.title,
         accountType: "credit|asset", // manually determined
         siteUrl: window.location.href,
-        twoFactor: false,
         interactionSteps: [],
         interactionValues: {}, // .env keys
+        twoFactor: false,
+        twoFactorInteractionSteps: [],
+        valuesToGet: [],
         spreadsheetColumn: "A" // would add row on automated run
       };
 
@@ -44,13 +45,29 @@ window.addEventListener('click', (e) => {
 
     console.log(e);
 
-    const { id, classList, placeholder } = e.target;
+    const { id, classList, placeholder, nodeName, parentNode, childNodes } = e.target;
+    let altId = "";
+    let altClassList = [];
+
+    console.log(nodeName);
+
+    // basic target check in case of element wrapper
+    if (nodeName !== "BUTTON" || nodeName !== "INPUT") {
+      // try parent node
+      if (parentNode.nodeName === "BUTTON" || parentNode.nodeName === "INPUT") {
+        altId = parentNode.id;
+        altClassList = parentNode.classList;
+      }
+      // try children node
+    }
 
     recordedEvents.interactionSteps.push({
-      elemId: `${truncateString(id + " " + classList.join(' '))}`, // kind of ugly
+      elemId: altId
+        ? `${truncateString(altId + "_" + Array.from(altClassList).join('_'))}`
+        : `${truncateString(id + "_" + Array.from(classList).join('_'))}`, // kind of ugly
       placeholder,
-      id,
-      classList,
+      id: altId || id,
+      classList: altClassList || classList,
       submitType: false // manually corrected
     });
 
@@ -59,15 +76,17 @@ window.addEventListener('click', (e) => {
 });
 
 window.addEventListener('keyup', (e) => {
-  console.log(e);
+  console.log(e, recording);
 
   if (recording) {
-    const elemId = `${truncateString(id + " " + classList.join(' '))}`;
     const { id, classList, placeholder } = e.target;
+    const elemId = `${truncateString(id + "_" + Array.from(classList).join('_'))}`;
+
+    console.log('check', elementInRecordedSet(elemId, recordedEvents.interactionSteps));
 
     if (!elementInRecordedSet(elemId, recordedEvents.interactionSteps)) {
       recordedEvents.interactionSteps.push({
-        elemId: `${truncateString(id + " " + classList.join(' '))}`, // kind of ugly
+        elemId: `${truncateString(id + "_" + Array.from(classList).join('_'))}`, // kind of ugly
         placeholder,
         id,
         classList,
@@ -80,50 +99,14 @@ window.addEventListener('keyup', (e) => {
   }
 });
 
-// https://stackoverflow.com/a/32158577/2710227
-// just going to use a timer for the case of a SPA deal
+// send data up to background.js continuously
 setInterval(() => {
-  if (window.location.href !== landingPageUrl) {
-    pageNavigated('timer');
-  }
-}, 500);
-
-// detect when page changes like logging in
-// if the page does not refresh/change url, can just hit save in the extension popup
-// https://gomakethings.com/how-to-detect-when-the-browser-url-changes-with-vanilla-js/
-// does not work on some sites
-window.addEventListener('popstate', () => {
-  console.log('pop');
-  pageNavigated('pop');
-});
-
-// unload eg. refresh
-// https://stackoverflow.com/a/7256224/2710227
-window.addEventListener("beforeunload", function (e) {
-  console.log('unload');
-  pageNavigated('unload');
-
-  (e || window.event).returnValue = null;
-  return null;
-});
-
-const pageNavigated = (navigationType) => {
-  alert('page navigate', navigationType);
-  if (recording && !pageNavigationDetected) {
-    pageNavigated = true;
-
-    sendMessageToExtension({
-      recordedEvent: recordedEvents, // hmm
-      stopRecording: true
-    });
-
-    alert('changing page');
-  }
-}
+  sendMessageToExtension({recordedEvent: recordedEvents});
+}, 250); // faster for submit events
 
 // expects object
 const sendMessageToExtension = (msg) => {
-  window.postMessage(msg);
+  chrome.runtime.sendMessage(msg);
 }
 
 // receive messages from chrome extension icon
@@ -140,8 +123,6 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
 
     if (msg.cmd === 'save') {
       recording = false;
-
-      alert(recordedEvents);
 
       // send up
       sendMessageToExtension({

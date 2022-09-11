@@ -149,6 +149,48 @@ Oh... my injected script doesn't persist so it gets erased, it also can't detect
 
 I'll just emit upwards at an interval so popui has the current data
 
+12:56 PM
+
+Well I was using the wrong messaging layer eg. `window.postMessage` vs. `chrome.runtime.sendMessage`
+
+But aside from that, still a weird problem of the thing being sent is the original object, even after modifications odd
+
+Ahh destruct order issue okay back on schedule
+
+1:21 PM
+
+Alright got it... moving forward
+
+I think for the scraping part, I'll toggle a "get item" thing, when you mouse over stuff, it'll add a border highlight around it, and when you click down, that'll save the element.
+
+The actual scraper will use `innerText` to get the value.
+
+Ahh dang the JSON formatter will need work
+
+Also still have to specify the target for 2FA
+
+Ahh man the 2FA stuff is hard to do in a pretty way
+
+Especially depending on how many steps there are to click through on a site
+
+An ideal interface would be a plus button you click on per section to add things.
+
+If you need another step for 2FA in this particular website just add it.
+
+With ability to remove (x on right)
+
+But... since I have so much work to do still and have to wire up 14 different sites... yeah I need to get going.
+
+1:59 PM
+
+I will have to pick the submit button too... since it seems to fail in saving that button before the page is destroyed
+
+I will make the element not clickable in that case/reject the event so that it can still be clicked to get info but not trigger submit.
+
+I want to get a fully functional thing done today even if it's ugly.
+
+Most of the rest of this work I've done before, just need to plug in.
+
 
 
 ### Saving recorded event into DB

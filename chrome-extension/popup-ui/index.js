@@ -25,8 +25,10 @@ const updateStorage = () => {
 const toggleRecording = (cmd) => {
   if (cmd?.stop) {
     storage.recording = false;
+    sendMessageToInjectedScript({cmd: 'save'});
   } else {
     storage.recording = true;
+    sendMessageToInjectedScript({cmd: 'start recording'});
   }
 
   updateStorage();
@@ -44,17 +46,26 @@ recordBtn.addEventListener('click', () => {
   if (storage?.recording) {
     recordBtn.innerText = 'Record';
     toggleRecording({stop: true});
+
+    // write to textarea and show it
+    // https://stackoverflow.com/a/26324037/2710227
+    const storageJson = JSON.parse(localStorage.getItem('barip'));
+    display.innerText = JSON.stringify(storageJson);
+    console.log(JSON.stringify(storageJson));
   } else {
     recordBtn.innerText = 'Recording...';
     helperText.innerText = 'When finished, hit save and view result output.';
 
     // send message down to injected script to start recording interactions on site
-    sendMessageToInjectedScript({cmd: 'start recording'});
     toggleRecording({stop: false});
 
     saveBtn.addEventListener('click', () => {
       toggleRecording({stop: true});
-      sendMessageToInjectedScript({cmd: 'save'});
+      
+      // do stuff
+
+      // wipe the localStorage
+      // localStorage.removeItem('barip');
     });
   }
 });
@@ -65,10 +76,13 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
   
   if (msg?.recordedEvent) {
     // validate what it is and clean, also do it on server side
-    console.log(msg);
+    console.log(msg, Object.keys(msg.recordedEvent).length, localStorage);
 
-    if (msg?.stopRecording) {
-      toggleRecording({stop: true});
+    // this length check prevents a blank write from overwriting any values
+    // this is due to say a page refresh
+    if (Object.keys(msg.recordedEvent).length) {
+      storage.recordedEvent = msg.recordedEvent; // make sure this persists even when popupui is closed
+      updateStorage();
     }
   }
 });
