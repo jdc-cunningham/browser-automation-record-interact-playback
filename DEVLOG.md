@@ -4,6 +4,8 @@
 
 moment of silence for today
 
+### Record browser events
+
 So first thing I have to figure out is the recorded interaction structure
 
 I should note that most of this project I have already built in the past so this is kind of an improvement/rehash.
@@ -109,5 +111,21 @@ Mini dillema, how to detect refresh
 Think I'll just rely on the extension eg. click stop to stop
 
 [Órale cabron](https://youtu.be/edCQxYzQqhU?t=1) hehe saw this in C&C movie long time ago
+
+11:18 AM
+
+I am losing direction, need to refocus
+
+I'm still working on the event recording right now
+
+Taking a quick break
+
+### Saving recorded event into DB
+
+### Puppeteer read and run events
+
+### 2FA integration
+
+### Check whole thing works
 
 
