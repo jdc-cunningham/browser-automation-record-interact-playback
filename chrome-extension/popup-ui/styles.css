@@ -14,9 +14,21 @@ h1 {
   margin-bottom: 0.5rem;
 }
 
+.hidden {
+  display: none;
+}
+
 #container {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
   flex-direction: column;
+}
+
+#helper-text {
+  margin-bottom: 1rem;
+}
+
+#record-status {
+  font-weight: bold;
 }

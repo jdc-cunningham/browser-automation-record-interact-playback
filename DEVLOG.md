@@ -78,3 +78,29 @@ Put some Korn on
 
 Ahh crap just realized you do need to inject JS to watch the page (to record)
 
+10:25 AM
+
+Oh yeah, you'd also want to be able to clean out bad events
+
+Which you could do with a nice UI (rows with minus to remove) but raw JSON is fine for now
+
+The input stuff, it'll check if the field you're typing into is recorded yet or not, if not save the field input info
+
+What sucks is the 2FA specification
+
+I think you'll know if you reach 2FA or not by more steps after first "submission" which how do you know...
+
+- url changes
+
+Need to know a submit button/event
+
+I'll capture both id and css in case one fails
+
+Worst case capture exact node position (not coordinates but DOM node nesting)
+
+Okay so some sites use cookies (can't purge state by local/session storage)
+
+This is with regard to making the UI render with no user info/blank slate eg. incognito
+
+[Me having a stroke](https://youtu.be/TcePkwagNFA?t=2) then (twist)
+
