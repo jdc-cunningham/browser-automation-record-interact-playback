@@ -191,7 +191,19 @@ I want to get a fully functional thing done today even if it's ugly.
 
 Most of the rest of this work I've done before, just need to plug in.
 
+2:10 PM
 
+You know... I'm not liking it
+
+It's not intuitive, ugly UI
+
+I'm also losing steam/interest to do this
+
+Oh yeah I can see a better way to do stuff too, like when you pick something, a UI pops up with identifiers, asks what it's for with some assumptions eg. input, say input.
+
+Numbered steps
+
+Ehh... lost it the ambition is gone dear chap
 
 ### Saving recorded event into DB
 
