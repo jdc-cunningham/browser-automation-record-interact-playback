@@ -30,6 +30,11 @@ Ultimately to save time, I have to login to several accounts/update a spreadshee
 - JavaScript/NodeJS, HTML, CSS
 - Puppeteer
 
+### Bad design/user flow
+- it does suck you have to update a .env separately
+  - that's my paranoia about storing user creds in plaintext, hashing means gotta enter them as plaintext somewhere
+- you could potentially do all of this without a backend if you wanted to watch it do the steps in the browser
+
 
 ### Misc notes
 

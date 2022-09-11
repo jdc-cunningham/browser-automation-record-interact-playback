@@ -1,0 +1,26 @@
+
+{
+  "name": "Browser Automation Record Playback",
+  "version": "1.0",
+  "description": "Record browser interactions, create JSON blob",
+  "manifest_version": 2,
+  "icons": {
+    "16": "./icons/icon_dark_16.png",
+    "48": "./icons/icon_dark_48.png",
+    "128": "./icons/icon_dark_128.png"
+  },
+  "browser_action": {
+    "default_icon": "./icons/icon_dark_16.png",
+    "default_popup": "popup-ui/index.html"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "run_at": "document_start",
+      "js": ["record.js"]
+    }
+  ]
+}

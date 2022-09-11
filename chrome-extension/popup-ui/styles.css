@@ -1,0 +1,22 @@
+body {
+  min-width: 300px;
+}
+
+body * {
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+  color: #282828;
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+#container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-direction: column;
+}

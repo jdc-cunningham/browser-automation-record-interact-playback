@@ -30,7 +30,9 @@ So the JSON structure might be something like this:
 ```
 {
   name: "name",
+  accountType: "", // debt, asset
   siteUrl: "",
+  twoFactor: bool,
   interactionSteps: [
     {
       target: "",
@@ -53,4 +55,26 @@ Other notes before writing code:
 9:17 AM
 
 Let's get to work... (playlist on)
+
+9:33 AM
+
+You could say it is a waste of time on my part to rebuild this again from scratch, why not extend the other one... well it was not really designed to do this process/scale. It is based on scripts that you could just add more of.
+
+Granted I am going to copy old code too so that will speed it up.
+
+9:45 AM
+
+Ooh I'm digging this icon I came up with ha, just means record/code
+
+9:52 AM
+
+yuck fingers feel nasty on keyboard
+
+making progress though
+
+10:00 AM
+
+Put some Korn on
+
+Ahh crap just realized you do need to inject JS to watch the page (to record)
 
