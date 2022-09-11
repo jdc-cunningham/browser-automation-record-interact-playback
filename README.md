@@ -1,3 +1,5 @@
+## Status [Incomplete]
+
 ### About
 
 This is a tool to record browser interaction, store it and then play it again in the future.
