@@ -82,6 +82,8 @@ const sendMessageToExtension = (msg) => {
 chrome.runtime.onMessage.addListener((request, sender, callback) => {
   const msg = request;
 
+  console.log(msg);
+
   if (msg?.cmd) {
     if (msg.cmd === 'start recording') {
       recording = true;

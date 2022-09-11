@@ -12,8 +12,10 @@ storage = storage ? JSON.parse(storage) : {}; // this is only used to store reco
 
 recordStatus.classList = 'hidden';
 
+console.log(storage);
+
 if (storage.recording) {
-  recordBtn.innerText = 'Recording...';
+  recordBtn.innerText = 'Stop recording';
 }
 
 const updateStorage = () => {
@@ -24,22 +26,28 @@ const sendMessageToInjectedScript = (msg) => {
   chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
     chrome.tabs.sendMessage(tabs[0].id, msg, (response) => {
       // not doing anything with response yet
-    });  
+    });
   });
 }
 
 recordBtn.addEventListener('click', () => {
-  recordBtn.innerText = 'Recording...';
-  helperText.innerText = 'When finished, hit save and view result output.';
+  if (storage?.recording) {
+    recordBtn.innerText = 'Record';
+    storage.recording = false;
+    updateStorage();
+  } else {
+    recordBtn.innerText = 'Recording...';
+    helperText.innerText = 'When finished, hit save and view result output.';
 
-  // send message down to injected script to start recording interactions on site
-  sendMessageToInjectedScript({cmd: 'start recording'});
-  storage.recording = true;
-  updateStorage();
+    // send message down to injected script to start recording interactions on site
+    sendMessageToInjectedScript({cmd: 'start recording'});
+    storage.recording = true;
+    updateStorage();
 
-  saveBtn.addEventListener('click', () => {
-    
-  });
+    saveBtn.addEventListener('click', () => {
+      
+    });
+  }
 });
 
 // receive recorded events

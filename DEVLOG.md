@@ -104,3 +104,10 @@ This is with regard to making the UI render with no user info/blank slate eg. in
 
 [Me having a stroke](https://youtu.be/TcePkwagNFA?t=2) then (twist)
 
+Mini dillema, how to detect refresh
+
+Think I'll just rely on the extension eg. click stop to stop
+
+[Órale cabron](https://youtu.be/edCQxYzQqhU?t=1) hehe saw this in C&C movie long time ago
+
+
