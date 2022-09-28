@@ -1,3 +1,24 @@
+Tasks
+
+- [ ] Saving recorded event into DB
+- [ ] Puppeteer read and run events
+- [ ] 2FA integration
+- [ ] Check whole thing works
+
+09/28/2022
+
+So... I've been down lately, two weeks or more.
+
+Starting to get motivated again to do things.
+
+This a project that I need to complete but kind of dreading, so will plan and split up the work.
+
+I'll definitely go for MVP ugly but works
+
+I still feel beat/lethargic... so will see how it goes.
+
+I'm still cheating right now (directly accessing apps and manually entering values into spreadsheet)
+
 09/11/2022
 
 9:00 AM
@@ -205,17 +226,6 @@ Numbered steps
 
 Ehh... lost it the ambition is gone dear chap
 
-### Saving recorded event into DB
-
-### Puppeteer read and run events
-
-### 2FA integration
-
-### Check whole thing works
-
-### Video
-
 show scratch demo site for event/element grabbing
 
 show entire screen, phone offscreen but console logs show sms sent/received
-
